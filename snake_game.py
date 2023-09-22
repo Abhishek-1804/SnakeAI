@@ -7,6 +7,8 @@ import numpy as np
 pygame.init()
 font = pygame.font.SysFont('arial', 25)
 
+# Define the possible directions the snake can move
+
 
 class Direction(Enum):
     RIGHT = 1
@@ -15,16 +17,21 @@ class Direction(Enum):
     DOWN = 4
 
 
+# Define a named tuple to represent points in the game
 Point = namedtuple('Point', 'x, y')
 
+# Define some color constants
 WHITE = (255, 255, 255)
 RED = (200, 0, 0)
 BLUE1 = (0, 0, 255)
 BLUE2 = (0, 100, 255)
 BLACK = (0, 0, 0)
 
+# Define the size of each block and the speed of the game
 BLOCK_SIZE = 20
 SPEED = 20  # adjust the speed of the snake to your liking
+
+# Define the Snake class
 
 
 class Snake:
@@ -32,14 +39,15 @@ class Snake:
     def __init__(self, w=640, h=480):
         self.w = w
         self.h = h
-        # init display
+        # Initialize the game window
         self.display = pygame.display.set_mode((self.w, self.h))
         pygame.display.set_caption('Snake')
         self.clock = pygame.time.Clock()
 
-        # init the game
+        # Initialize the game
         self.direction = Direction.RIGHT
 
+        # Initialize the snake with a head and two body segments
         self.head = Point(self.w/2, self.h/2)
         self.snake = [self.head,
                       Point(self.head.x-BLOCK_SIZE, self.head.y),
@@ -49,6 +57,7 @@ class Snake:
         self.food = None
         self._place_food()
 
+    # Place food at a random location on the game board
     def _place_food(self):
         x = random.randint(0, (self.w-BLOCK_SIZE)//BLOCK_SIZE)*BLOCK_SIZE
         y = random.randint(0, (self.h-BLOCK_SIZE)//BLOCK_SIZE)*BLOCK_SIZE
@@ -58,8 +67,9 @@ class Snake:
         if self.food in self.snake:
             self._place_food()
 
+    # Handle a single step of the game
     def play_step(self):
-        # 1. collect user input
+        # 1. Collect user input
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -74,56 +84,62 @@ class Snake:
                 elif event.key == pygame.K_DOWN:
                     self.direction = Direction.DOWN
 
-        # 2. move
-        self._move(self.direction)  # update the head
+        # 2. Move the snake
+        self._move(self.direction)  # Update the head
         self.snake.insert(0, self.head)
 
-        # 3. check if game over
+        # 3. Check if the game is over
         game_over = False
         if self._is_collision():
             game_over = True
             return game_over, self.score
 
-        # 4. place new food or just move
+        # 4. Place new food or just move
         if self.head == self.food:
             self.score += 1
             self._place_food()
         else:
             self.snake.pop()
 
-        # 5. update ui and clock
+        # 5. Update the user interface and clock
         self._update_ui()
         self.clock.tick(SPEED)
 
-        # 6. return game over and score
+        # 6. Return whether the game is over and the current score
         return game_over, self.score
 
+    # Check if the snake has collided with the boundaries or itself
     def _is_collision(self):
-        # hits boundary
+        # Check if the snake hits the boundaries of the game board
         if self.head.x > self.w - BLOCK_SIZE or self.head.x < 0 or self.head.y > self.h - BLOCK_SIZE or self.head.y < 0:
             return True
-        # hits itself
+        # Check if the snake hits itself
         if self.head in self.snake[1:]:
             return True
 
         return False
 
+    # Update the user interface (UI) with the current game state
     def _update_ui(self):
         self.display.fill(BLACK)
 
+        # Draw the snake body
         for pt in self.snake:
             pygame.draw.rect(self.display, BLUE1, pygame.Rect(
                 pt.x, pt.y, BLOCK_SIZE, BLOCK_SIZE))
             pygame.draw.rect(self.display, BLUE2,
                              pygame.Rect(pt.x+4, pt.y+4, 12, 12))
 
+        # Draw the food
         pygame.draw.rect(self.display, RED, pygame.Rect(
             self.food.x, self.food.y, BLOCK_SIZE, BLOCK_SIZE))
 
+        # Display the current score
         text = font.render("Score: " + str(self.score), True, WHITE)
         self.display.blit(text, [0, 0])
         pygame.display.flip()
 
+    # Move the snake in the specified direction
     def _move(self, direction):
         x = self.head.x
         y = self.head.y
@@ -139,6 +155,7 @@ class Snake:
         self.head = Point(x, y)
 
 
+# Entry point of the program
 if __name__ == "__main__":
     game = Snake()
 

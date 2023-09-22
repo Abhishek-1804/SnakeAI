@@ -6,10 +6,10 @@ from snakeAI import SnakeAI, Direction, Point
 from model import Linear_QNet, QTrainer
 from helper import plot
 
-# max memory for the deque; we can adjust to our liking
+# Maximum memory for the replay memory; can be adjusted
 MAX_MEMORY = 100_000
 
-# batch size for our model input
+# Batch size for training sample input
 BATCH_SIZE = 1000
 LR = 0.001
 
@@ -30,16 +30,19 @@ class Agent:
         # Calculate and return the game state as a feature vector
         head = snakeAI.snake[0]
 
+        # Define points in different directions from the snake's head
         point_l = Point(head.x - 20, head.y)
         point_r = Point(head.x + 20, head.y)
         point_u = Point(head.x, head.y - 20)
         point_d = Point(head.x, head.y + 20)
 
+        # Determine if the snake is moving in each direction
         dir_l = snakeAI.direction == Direction.LEFT
         dir_r = snakeAI.direction == Direction.RIGHT
         dir_u = snakeAI.direction == Direction.UP
         dir_d = snakeAI.direction == Direction.DOWN
 
+        # Create a state vector with various features
         state = [
             # Danger straight
             (dir_l and snakeAI.is_collision(point_l)) or
@@ -65,12 +68,11 @@ class Agent:
             dir_u,
             dir_d,
 
-            #
+            # Food relative position
             snakeAI.food.x < snakeAI.head.x,  # food left
             snakeAI.food.x > snakeAI.head.x,  # food right
             snakeAI.food.y < snakeAI.head.y,  # food up
             snakeAI.food.y > snakeAI.head.y  # food down
-
         ]
 
         return np.array(state, dtype=int)
@@ -96,7 +98,7 @@ class Agent:
 
     def get_action(self, state):
         # Determine the action to take based on the current state
-        # random moves; exploration vs exploitation
+        # Random moves for exploration vs. exploitation
         # Exploration rate (controls randomness)
         self.epsilon = 80 - self.n_games
         final_move = [0, 0, 0]
@@ -142,7 +144,7 @@ def train():
 
             plot_scores.append(score)
             total_score += score
-            mean_score = total_score/agent.n_games
+            mean_score = total_score / agent.n_games
             plot_mean_scores.append(mean_score)
             plot(plot_scores, plot_mean_scores)
 

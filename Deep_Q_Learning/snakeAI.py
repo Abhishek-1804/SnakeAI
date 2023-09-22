@@ -15,6 +15,7 @@ class Direction(Enum):
     UP = 3
     DOWN = 4
 
+
 # namedtuples for coordinates because they are more readable
 Point = namedtuple('Point', 'x, y')
 
@@ -25,10 +26,12 @@ BLUE2 = (0, 100, 255)
 BLACK = (0, 0, 0)
 
 BLOCK_SIZE = 20
-SPEED = 100  # adjust the speed of the snake to your liking
+SPEED = 250  # adjust the speed of the snake to your liking
 
 # reinforcement learning is : action, reward, environment
 # action is what the agent is telling the program to do
+
+
 class SnakeAI:
 
     def __init__(self, w=640, h=480):
@@ -101,7 +104,7 @@ class SnakeAI:
     def is_collision(self, pt=None):
         if pt is None:
             pt = self.head
-            
+
         # hits boundary
         if pt.x > self.w - BLOCK_SIZE or pt.x < 0 or pt.y > self.h - BLOCK_SIZE or pt.y < 0:
             return True
@@ -129,19 +132,20 @@ class SnakeAI:
 
     def _move(self, action):
         # [straight, right, left]
-        
-        clock_wise = [Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP]
+
+        clock_wise = [Direction.RIGHT, Direction.DOWN,
+                      Direction.LEFT, Direction.UP]
         idx = clock_wise.index(self.direction)
-        
+
         if np.array_equal(action, [1, 0, 0]):
             new_dir = clock_wise[idx]
         elif np.array_equal(action, [0, 1, 0]):
-            new_dir = clock_wise[(idx+1)%4]
+            new_dir = clock_wise[(idx+1) % 4]
         else:
-            new_dir = clock_wise[(idx-1)%4]
+            new_dir = clock_wise[(idx-1) % 4]
 
         self.direction = new_dir
-        
+
         x = self.head.x
         y = self.head.y
         if self.direction == Direction.RIGHT:

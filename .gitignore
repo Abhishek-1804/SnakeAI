@@ -46,4 +46,4 @@ dist/**
 # translation files
 *.xlf
 package.nls.*.json
-l10n/
+snakeAI_venv/

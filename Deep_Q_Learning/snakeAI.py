@@ -26,7 +26,7 @@ BLUE2 = (0, 100, 255)
 BLACK = (0, 0, 0)
 
 BLOCK_SIZE = 20
-SPEED = 100  # adjust the speed of the snake to your liking
+SPEED = 150  # adjust the speed of the snake to your liking
 
 # reinforcement learning is : action, reward, environment
 # action is what the agent is telling the program to do

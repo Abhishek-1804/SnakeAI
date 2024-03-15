@@ -43,7 +43,7 @@ Follow these steps to run the Snake game and the Deep Q Learning agent:
 
 2. **Create a virtual environment**
     
-    '''python
+    ```python
     # For Windows and Linux
     python3 -m venv <venv name>
 

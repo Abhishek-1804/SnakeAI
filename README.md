@@ -41,18 +41,27 @@ Follow these steps to run the Snake game and the Deep Q Learning agent:
 
 1. **Clone or Fork the Project**
 
-2. **Install Dependencies:**
+2. **Create a virtual environment**
+    
+    '''python
+    # For Windows and Linux
+    python3 -m venv <venv name>
+
+    # For macOS
+    python3 -m venv <venv name>
+
+3. **Install Dependencies:**
 
    Before running the game, ensure you have the necessary dependencies installed:
 
    ```python
    # For Windows and Linux
-   pip install pygame torch
+   pip install -r requirements.txt
    
    # For macOS
-   pip3 install pygame torch
+   pip3 install -r requirements.txt
 
-3. **To play the snake game:**
+4. **To play the snake game:**
     
     ```python
    # For Windows and Linux
@@ -61,7 +70,7 @@ Follow these steps to run the Snake game and the Deep Q Learning agent:
    # For macOS
    python3 snake_game.py
 
-4. **To run the Deep Q Learning Agent:**
+5. **To run the Deep Q Learning Agent:**
 
     ```python
     cd Deep_Q_Learning
@@ -72,7 +81,7 @@ Follow these steps to run the Snake game and the Deep Q Learning agent:
    # For macOS
    python3 agent.py
 
-5. **To Run a Custom Model on the Agent:**
+6. **To Run a Custom Model on the Agent:**
 
    If you have a pretrained model and would like to run it with the agent, follow these steps:
 
